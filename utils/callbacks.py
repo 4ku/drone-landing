@@ -10,12 +10,12 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
     based on the training reward (in practice, we recommend using ``EvalCallback``).
 
     :param check_freq: (int)
-    :param log_dir: (str) Path to the folder where the model will be saved.
+    :param log_dir: (str) Path to the monitor.csv file to get the training reward from.
     """
-    def __init__(self, check_freq: int, log_file: str):
+    def __init__(self, check_freq: int, log_dir: str):
         super(SaveOnBestTrainingRewardCallback, self).__init__()
         self.check_freq = check_freq
-        self.log_file = log_file
+        self.log_dir = log_dir
         self.best_mean_reward = -np.inf
 
     def _init_callback(self) -> None:
@@ -25,7 +25,7 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
         if self.n_calls % self.check_freq == 0:
 
           # Retrieve training reward
-          x, y = ts2xy(load_results(self.log_file), 'timesteps')
+          x, y = ts2xy(load_results(self.log_dir), 'timesteps')
           if len(x) > 0:
               # Mean training reward over the last 100 episodes
               mean_reward = np.mean(y[-100:])
