@@ -12,31 +12,28 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
     :param check_freq: (int)
     :param log_dir: (str) Path to the folder where the model will be saved.
     """
-    def __init__(self, check_freq: int, log_dir: str):
+    def __init__(self, check_freq: int, log_file: str):
         super(SaveOnBestTrainingRewardCallback, self).__init__()
         self.check_freq = check_freq
-        self.log_dir = log_dir
-        self.save_path = os.path.join(log_dir, 'best_model')
+        self.log_file = log_file
         self.best_mean_reward = -np.inf
 
     def _init_callback(self) -> None:
-        # Create folder if needed
-        if self.save_path is not None:
-            os.makedirs(self.save_path, exist_ok=True)
+        pass
 
     def _on_step(self) -> bool:
         if self.n_calls % self.check_freq == 0:
 
           # Retrieve training reward
-          x, y = ts2xy(load_results(self.log_dir), 'timesteps')
+          x, y = ts2xy(load_results(self.log_file), 'timesteps')
           if len(x) > 0:
               # Mean training reward over the last 100 episodes
               mean_reward = np.mean(y[-100:])
               if self.best_mean_reward < mean_reward:
                   self.best_mean_reward = mean_reward
-                  # Example for saving best model
-                  print(f"Saving new best model to {self.save_path}.zip")
-                  self.model.save(self.save_path)
+                  save_path = os.path.join(self.model.logger.dir, 'best_model')
+                  print(f"Saving new best model to {save_path}.zip")
+                  self.model.save(save_path)
 
         return True
 

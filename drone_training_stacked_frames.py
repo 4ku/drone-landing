@@ -26,14 +26,15 @@ DEFAULT_EVAL = False
 DEFAULT_MODEL_NAME = "landing-aviary-ppo"
 
 
-log_dir = "./logs/"
+log_dir = "./tensorboard/"
+unique_file = os.path.join(log_dir, f'env_{os.getpid()}')
 os.makedirs(log_dir, exist_ok=True)
 
 
 def make_env(gui, record, training=True):
     env = gym.make("landing-aviary-v0")
     env = LandingAviary(gui=gui, record=record)
-    env = Monitor(env, log_dir) if training else env
+    env = Monitor(env, unique_file) if training else env
     env = DummyVecEnv([lambda: env])
     env = VecFrameStack(env, n_stack=3)
     env.seed(42)
@@ -46,10 +47,10 @@ def train_model(env, checkpoint=None, model_name=DEFAULT_MODEL_NAME):
         model = PPO.load(checkpoint, env)
     else:
         print("Creating new model...")
-        model = PPO(CustomPolicy, env, verbose=1, tensorboard_log="./tensorboard/")
+        model = PPO(CustomPolicy, env, verbose=1, tensorboard_log=log_dir)
 
-    callback = SaveOnBestTrainingRewardCallback(check_freq=30000, log_dir=log_dir)
-    model.learn(total_timesteps=1_000_000, callback=callback)
+    callback = SaveOnBestTrainingRewardCallback(check_freq=30000, log_file=unique_file)
+    model.learn(total_timesteps=2_000_000, callback=callback)
     model.save(os.path.join(model.logger.dir, model_name))
 
 

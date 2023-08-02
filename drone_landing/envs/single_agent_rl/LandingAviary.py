@@ -14,8 +14,8 @@ def get_random_position():
     return np.array(
         [
             [
-                np.random.uniform(-0.05, 0.05),
-                np.random.uniform(-0.05, 0.05),
+                np.random.uniform(-0.15, 0.15),
+                np.random.uniform(-0.15, 0.15),
                 np.random.uniform(0.05, 0.05),
             ]
         ]
@@ -86,7 +86,7 @@ class LandingAviary(BaseSingleAgentAviary):
             obs=obs,
             act=act,
         )
-        self.EPISODE_LEN_SEC = 1
+        self.EPISODE_LEN_SEC = 2
         self.prev_penalty = None
 
 
