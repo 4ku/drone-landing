@@ -50,7 +50,7 @@ def train_model(env, checkpoint=None, model_name=DEFAULT_MODEL_NAME):
         model = PPO(CustomPolicy, env, verbose=1, tensorboard_log=log_dir)
 
     callback = SaveOnBestTrainingRewardCallback(check_freq=30000, log_dir=monitor_folder)
-    model.learn(total_timesteps=2_000_000, callback=callback)
+    model.learn(total_timesteps=10_000_000, callback=callback)
     model.save(os.path.join(model.logger.dir, model_name))
 
 
