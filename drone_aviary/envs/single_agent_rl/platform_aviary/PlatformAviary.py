@@ -72,9 +72,8 @@ class PlatformAviary(BaseSingleAgentAviary):
         These obstacles are loaded from standard URDF files included in Bullet.
         """
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        grandparent_directory = os.path.dirname(os.path.dirname(current_directory))
         p.setAdditionalSearchPath(
-            grandparent_directory, physicsClientId=self.CLIENT
+            current_directory, physicsClientId=self.CLIENT
         )
 
         p.loadURDF(
