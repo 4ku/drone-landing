@@ -85,7 +85,7 @@ class LandingAviary(BaseSingleAgentAviary):
             obs=obs,
             act=act,
         )
-        self.EPISODE_LEN_SEC = 5
+        self.EPISODE_LEN_SEC = 2
         self.prev_penalty = None
 
 
@@ -166,6 +166,8 @@ class LandingAviary(BaseSingleAgentAviary):
 
         """
         state = self._getDroneStateVector(0)
+        if state[2] < 0.03:
+            return -5
         # return -1 * np.linalg.norm(np.array([0, 0, 1])-state[0:3])**2
         return 0.1 * state[2]
 
@@ -229,6 +231,9 @@ class LandingAviary(BaseSingleAgentAviary):
         # # Stop conditions in reaching target point
         # # self.done = state[2] <= 0.05
         # return self.done
+        state = self._getDroneStateVector(0)
+        if state[2] < 0.03:
+            return True
         if self.step_counter/self.PYB_FREQ > self.EPISODE_LEN_SEC:
             return True
         else:
