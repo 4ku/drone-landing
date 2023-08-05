@@ -3,7 +3,7 @@ import numpy as np
 from gymnasium import spaces
 import pybullet as p
 
-from drone_landing.envs.BaseAviary import BaseAviary
+from drone_aviary.envs.BaseAviary import BaseAviary
 from gym_pybullet_drones.utils.enums import DroneModel, Physics, ImageType, ActionType, ObservationType
 from gym_pybullet_drones.control.DSLPIDControl import DSLPIDControl
 
