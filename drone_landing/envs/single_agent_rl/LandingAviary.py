@@ -85,7 +85,7 @@ class LandingAviary(BaseSingleAgentAviary):
             obs=obs,
             act=act,
         )
-        self.EPISODE_LEN_SEC = 1
+        self.EPISODE_LEN_SEC = 5
         self.prev_penalty = None
 
 

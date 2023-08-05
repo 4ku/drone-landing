@@ -36,7 +36,7 @@ def make_env(gui, record, training=True):
     env = LandingAviary(gui=gui, record=record)
     env = Monitor(env, monitor_folder) if training else env
     env = DummyVecEnv([lambda: env])
-    env = VecFrameStack(env, n_stack=3)
+    env = VecFrameStack(env, n_stack=10)
     env.seed(42)
     return env
 
