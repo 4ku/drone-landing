@@ -22,7 +22,8 @@ class DroneTrainer:
     DEFAULT_RECORD_VIDEO = True
     DEFAULT_OUTPUT_FOLDER = "results"
     DEFAULT_EVAL = False
-    DEFAULT_ENV = "takeoff"  # or 'landing'
+    # DEFAULT_ENV = "takeoff"  # or 'landing'
+    DEFAULT_ENV = "landing"  # or 'landing'
     DEFAULT_MODEL_TYPE = "PPO"
 
     def __init__(
@@ -106,6 +107,7 @@ class DroneTrainer:
         CTRL_TIMESTEP = env.venv.envs[0].CTRL_TIMESTEP
         for i in range(10 * CTRL_FREQ):
             action, _states = model.predict(obs)
+            # action = np.array([[1, 1, 1, 1]])
             obs, reward, terminated, info = env.step(action)
             total_reward += reward
             env.render()
