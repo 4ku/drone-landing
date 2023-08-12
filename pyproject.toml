@@ -5,7 +5,7 @@ description = "PyBullet Gym drone landing environment for reinforcement learning
 authors = ["Ivan Efremov"]
 license = "MIT"
 packages = [
-    { include = "drone_landing" }
+    { include = "drone_aviary" }
 ]
 
 [build-system]
