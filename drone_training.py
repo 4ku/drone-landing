@@ -88,7 +88,7 @@ class DroneTrainer:
                 tensorboard_log=self.log_dir,
             )
         callback = SaveOnBestTrainingRewardCallback(
-            check_freq=30000, log_dir=self.monitor_folder
+            check_freq=20000, log_dir=self.monitor_folder
         )
         model.learn(total_timesteps=1_000_000, callback=callback)
         model.save(os.path.join(model.logger.dir, self.model_name))
