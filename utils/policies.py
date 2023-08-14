@@ -1,4 +1,5 @@
-import gymnasium as gym
+# import gymnasium as gym
+import gym
 import torch 
 import torch.nn as nn
 from stable_baselines3.common.policies import ActorCriticPolicy

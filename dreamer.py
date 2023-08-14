@@ -6,7 +6,7 @@ warnings.filterwarnings('ignore', '.*truncated to dtype int32.*')
 
 # See configs.yaml for all options.
 config = embodied.Config(dreamerv3.configs['defaults'])
-config = config.update(dreamerv3.configs['medium'])
+config = config.update(dreamerv3.configs['small'])
 config = config.update({
     'logdir': 'tensorboard/run1',
     'run.train_ratio': 64,
@@ -14,12 +14,13 @@ config = config.update({
     'run.save_every': 300,  # Seconds
     'run.from_checkpoint': '',
     'batch_size': 16,
+    'batch_length': 32,
     'jax.prealloc': False,
     'encoder.mlp_keys': '$^',
     'decoder.mlp_keys': '$^',
     'encoder.cnn_keys': 'image',
     'decoder.cnn_keys': 'image',
-    'replay_size': 70000,
+    'replay_size': 150000,
     # 'jax.platform': 'cpu',
 })
 config = embodied.Flags(config).parse()

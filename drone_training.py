@@ -2,7 +2,6 @@ import os
 import time
 import argparse
 import numpy as np
-import gymnasium as gym
 from stable_baselines3 import PPO
 from drone_aviary.envs import TakeoffAviary, LandingAviary
 from gym_pybullet_drones.utils.utils import sync, str2bool
@@ -22,8 +21,7 @@ class DroneTrainer:
     DEFAULT_RECORD_VIDEO = True
     DEFAULT_OUTPUT_FOLDER = "results"
     DEFAULT_EVAL = False
-    # DEFAULT_ENV = "takeoff"  # or 'landing'
-    DEFAULT_ENV = "landing"  # or 'landing'
+    DEFAULT_ENV = "takeoff"  # or 'landing'
     DEFAULT_MODEL_TYPE = "PPO"
 
     def __init__(
@@ -56,19 +54,14 @@ class DroneTrainer:
             self.record_video = False
 
         if self.env_type == "takeoff":
-            env = gym.make("takeoff-aviary-v0")
             env = TakeoffAviary(gui=self.gui, record=self.record_video)
         elif self.env_type == "landing":
-            env = gym.make("landing-aviary-v0")
             env = LandingAviary(gui=self.gui, record=self.record_video)
         else:
             raise ValueError("Invalid environment type. Choose 'takeoff' or 'landing'.")
         env = Monitor(env, self.monitor_folder) if training else env
         env = DummyVecEnv([lambda: env])
         env = VecFrameStack(env, n_stack=6)
-        env.seed(42)
-        print("[INFO] Action space:", env.action_space)
-        print("[INFO] Observation space:", env.observation_space)
         return env
 
     def train_model(self):
