@@ -50,7 +50,7 @@ class TakeoffAviary(PlatformAviary):
 
     ################################################################################
 
-    def _computeTerminated(self):
+    def _computeDone(self):
         """Computes the current done value.
 
         Returns
@@ -62,7 +62,7 @@ class TakeoffAviary(PlatformAviary):
         state = self._getDroneStateVector(0)
         if state[2] < 0.03:
             return True
-        if self.step_counter / self.PYB_FREQ > self.EPISODE_LEN_SEC:
+        if self.step_counter / self.SIM_FREQ > self.EPISODE_LEN_SEC:
             return True
         else:
             return False

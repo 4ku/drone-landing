@@ -1,13 +1,14 @@
 # import gymnasium as gym
 import gym
-import torch 
+import torch
 import torch.nn as nn
 from stable_baselines3.common.policies import ActorCriticPolicy
+
 
 class CustomCNN(nn.Module):
     def __init__(self, observation_space: gym.spaces.Space):
         super(CustomCNN, self).__init__()
-        n_input_channels = observation_space.shape[0]  
+        n_input_channels = observation_space.shape[0]
         self.cnn = nn.Sequential(
             nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4),
             nn.BatchNorm2d(32),
@@ -31,54 +32,18 @@ class CustomCNN(nn.Module):
         # After flatten:  torch.Size([1, 512])
 
         with torch.no_grad():
-            n_flatten = self.cnn(torch.as_tensor(observation_space.sample()[None]).float()).shape[1]
+            n_flatten = self.cnn(
+                torch.as_tensor(observation_space.sample()[None]).float()
+            ).shape[1]
 
         self.features_dim = n_flatten
 
     def forward(self, observations: torch.Tensor):
         return self.cnn(observations)
 
+
 class CustomPolicy(ActorCriticPolicy):
     def __init__(self, *args, **kwargs):
-        super(CustomPolicy, self).__init__(*args, **kwargs,
-                                           net_arch=[128, 128],  
-                                           features_extractor_class=CustomCNN)
-
-
-
-# import gymnasium as gym
-# import torch 
-# import torch.nn as nn
-# from stable_baselines3.common.policies import ActorCriticPolicy
-
-# class CustomCNN(nn.Module):
-#     def __init__(self, observation_space: gym.spaces.Space):
-#         super(CustomCNN, self).__init__()
-#         n_input_channels = observation_space.shape[0]  # get the number of input channels from observation space
-#         self.cnn = nn.Sequential(
-#             nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4),
-#             nn.ReLU(),
-#             nn.Conv2d(32, 64, kernel_size=4, stride=2),
-#             nn.ReLU(),
-#             nn.Conv2d(64, 64, kernel_size=3, stride=1),
-#             nn.ReLU(),
-#             nn.Flatten(),
-#         )
-#         # Compute shape by doing one forward pass
-#         with torch.no_grad():
-#             n_flatten = self.cnn(torch.as_tensor(observation_space.sample()[None]).float()).shape[1]
-
-#         self.linear = nn.Sequential(nn.Linear(n_flatten, 64), nn.ReLU())
-
-#         # Set the dimensionality of the output features
-#         self.features_dim = 64  # <-- This value needs to be the output dimension of your feature extractor
-
-#     def forward(self, observations: torch.Tensor):
-#         return self.linear(self.cnn(observations))
-
-
-# class CustomPolicy(ActorCriticPolicy):
-#     def __init__(self, *args, **kwargs):
-#         super(CustomPolicy, self).__init__(*args, **kwargs,
-#                                            net_arch=[64, 64],  # MLP after the features extractor
-#                                            features_extractor_class=CustomCNN)
+        super(CustomPolicy, self).__init__(
+            *args, **kwargs, net_arch=[128, 128], features_extractor_class=CustomCNN
+        )

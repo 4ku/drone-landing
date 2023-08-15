@@ -14,8 +14,7 @@ config = config.update({
     'run.save_every': 300,  # Seconds
     'run.from_checkpoint': '',
     'batch_size': 16,
-    'batch_length': 32,
-    'jax.prealloc': False,
+    'jax.prealloc': True,
     'encoder.mlp_keys': '$^',
     'decoder.mlp_keys': '$^',
     'encoder.cnn_keys': 'image',

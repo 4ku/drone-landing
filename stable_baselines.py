@@ -5,7 +5,6 @@ import numpy as np
 from stable_baselines3 import PPO
 from drone_aviary.envs import TakeoffAviary, LandingAviary
 from gym_pybullet_drones.utils.utils import sync, str2bool
-from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import VecFrameStack, DummyVecEnv
 

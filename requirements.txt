@@ -1,2 +1,8 @@
-git+https://github.com/4ku/dreamerv3.git@6d0feb1#egg=dreamerv3
+-e git+https://github.com/4ku/dreamerv3.git@6d0feb1#egg=dreamerv3
 imitation==0.4.0
+nvidia-cudnn-cu11==8.6.0.163
+tensorflow==2.13.*
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch
+torchvision
+torchaudio

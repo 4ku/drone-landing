@@ -12,10 +12,13 @@ class TakeoffExpert(HardCodedPolicy):
     def __init__(self, observation_space, action_space):
         super().__init__(observation_space, action_space)
 
-    def forward(self, *args):
+    def _choose_action(self, obs: np.ndarray) -> np.ndarray:
         # Always return the optimal action for takeoff
-        return np.array([[1, 1, 1, 1]])
-    
+        return np.array([1, 1, 1, 1])
+
+    def forward(self, *args):
+        # This method is not needed for HardCodedPolicy
+        pass  
 
 # Create a random number generator
 rng = np.random.default_rng(0)
@@ -23,7 +26,7 @@ rng = np.random.default_rng(0)
 # Create the environment
 # env = TakeoffAviary(gui=False, record=False)
 env = make_vec_env(
-    "takeoff-aviary-v0",
+    "TakeoffAviary-v0",
     n_envs=1,
     rng=rng,  
     post_wrappers=[lambda env, _: RolloutInfoWrapper(env)],  # for computing rollouts

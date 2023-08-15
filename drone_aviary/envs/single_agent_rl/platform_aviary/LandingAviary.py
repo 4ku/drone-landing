@@ -73,7 +73,7 @@ class LandingAviary(PlatformAviary):
 
         # Reward for landing
         if state[2] <= 0.05:
-            # if self.step_counter / self.PYB_FREQ < 0.9:
+            # if self.step_counter / self.SIM_FREQ < 0.9:
             #     reward -= 100
 
             # Bigger reward if landed within target radius
@@ -113,7 +113,7 @@ class LandingAviary(PlatformAviary):
 
     ################################################################################
 
-    def _computeTerminated(self):
+    def _computeDone(self):
         """Computes the current done value.
 
         Returns
@@ -126,7 +126,7 @@ class LandingAviary(PlatformAviary):
         state = self._getDroneStateVector(0)
         if state[2] <= 0.03:
             return True
-        if self.step_counter / self.PYB_FREQ > self.EPISODE_LEN_SEC:
+        if self.step_counter / self.SIM_FREQ > self.EPISODE_LEN_SEC:
             return True
         else:
             return False
