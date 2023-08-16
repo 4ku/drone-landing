@@ -353,7 +353,7 @@ class BaseSingleAgentAviary(BaseAviary):
                 if self.RECORD:
                     self._exportImage(img_type=ImageType.RGB,
                                       img_input=self.rgb[0],
-                                      path=self.ONBOARD_IMG_PATH,
+                                      path=self.RECORD_PATH,
                                       frame_num=int(self.step_counter/self.IMG_CAPTURE_FREQ)
                                       )
             return self.rgb[0]

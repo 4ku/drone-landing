@@ -125,6 +125,9 @@ class BaseAviary(gym.Env):
         self.MAX_Z_TORQUE = (2*self.KM*self.MAX_RPM**2)
         self.GND_EFF_H_CLIP = 0.25 * self.PROP_RADIUS * np.sqrt((15 * self.MAX_RPM**2 * self.KF * self.GND_EFF_COEFF) / self.MAX_THRUST)
         #### Create attributes for vision tasks ####################
+        if self.RECORD:
+            self.RECORD_PATH = os.path.join(self.OUTPUT_FOLDER, "recording_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S"))
+        
         self.VISION_ATTR = vision_attributes
         if self.VISION_ATTR:
             self.IMG_RES = np.array([64, 64])
@@ -137,9 +140,7 @@ class BaseAviary(gym.Env):
                 print("[ERROR] in BaseAviary.__init__(), aggregate_phy_steps incompatible with the desired video capture frame rate ({:f}Hz)".format(self.IMG_FRAME_PER_SEC))
                 exit()
             if self.RECORD:
-                # TODO: This doesn't appear to work in general 
-                self.ONBOARD_IMG_PATH = os.path.join(self.OUTPUT_FOLDER, "recording_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S"))
-                os.makedirs(os.path.dirname(self.ONBOARD_IMG_PATH), exist_ok=True)
+                os.makedirs(self.RECORD_PATH, exist_ok=True)
         #### Create attributes for dynamics control inputs #########
         self.DYNAMICS_ATTR = dynamics_attributes
         if self.DYNAMICS_ATTR:
@@ -214,11 +215,11 @@ class BaseAviary(gym.Env):
         self.action_space = self._actionSpace()
         self.observation_space = self._observationSpace()
         #### Housekeeping ##########################################
-        self._housekeeping()
-        #### Update and store the drones kinematic information #####
-        self._updateAndStoreKinematicInformation()
-        #### Start video recording #################################
-        self._startVideoRecording()
+        # self._housekeeping()
+        # # #### Update and store the drones kinematic information #####
+        # self._updateAndStoreKinematicInformation()
+        # # #### Start video recording #################################
+        # self._startVideoRecording()
     
     ################################################################################
 
@@ -272,23 +273,23 @@ class BaseAviary(gym.Env):
 
         """
         #### Save PNG video frames if RECORD=True and GUI=False ####
-        if self.RECORD and not self.GUI and self.step_counter%self.CAPTURE_FREQ == 0:
-            [w, h, rgb, dep, seg] = p.getCameraImage(width=self.VID_WIDTH,
-                                                     height=self.VID_HEIGHT,
-                                                     shadow=1,
-                                                     viewMatrix=self.CAM_VIEW,
-                                                     projectionMatrix=self.CAM_PRO,
-                                                     renderer=p.ER_TINY_RENDERER,
-                                                     flags=p.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX,
-                                                     physicsClientId=self.CLIENT
-                                                     )
-            (Image.fromarray(np.reshape(rgb, (h, w, 4)), 'RGBA')).save(os.path.join(self.IMG_PATH, "frame_"+str(self.FRAME_NUM)+".png"))
+        # if self.RECORD and not self.GUI and self.step_counter%self.CAPTURE_FREQ == 0:
+        #     [w, h, rgb, dep, seg] = p.getCameraImage(width=self.VID_WIDTH,
+        #                                              height=self.VID_HEIGHT,
+        #                                              shadow=1,
+        #                                              viewMatrix=self.CAM_VIEW,
+        #                                              projectionMatrix=self.CAM_PRO,
+        #                                              renderer=p.ER_TINY_RENDERER,
+        #                                              flags=p.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX,
+        #                                              physicsClientId=self.CLIENT
+        #                                              )
+            # (Image.fromarray(np.reshape(rgb, (h, w, 4)), 'RGBA')).save(os.path.join(self.IMG_PATH, "frame_"+str(self.FRAME_NUM)+".png"))
             #### Save the depth or segmentation view instead #######
             # dep = ((dep-np.min(dep)) * 255 / (np.max(dep)-np.min(dep))).astype('uint8')
             # (Image.fromarray(np.reshape(dep, (h, w)))).save(self.IMG_PATH+"frame_"+str(self.FRAME_NUM)+".png")
             # seg = ((seg-np.min(seg)) * 255 / (np.max(seg)-np.min(seg))).astype('uint8')
             # (Image.fromarray(np.reshape(seg, (h, w)))).save(self.IMG_PATH+"frame_"+str(self.FRAME_NUM)+".png")
-            self.FRAME_NUM += 1
+            # self.FRAME_NUM += 1
         #### Read the GUI's input parameters #######################
         if self.GUI and self.USER_DEBUG:
             current_input_switch = p.readUserDebugParameter(self.INPUT_SWITCH, physicsClientId=self.CLIENT)
@@ -503,13 +504,13 @@ class BaseAviary(gym.Env):
         """
         if self.RECORD and self.GUI:
             self.VIDEO_ID = p.startStateLogging(loggingType=p.STATE_LOGGING_VIDEO_MP4,
-                                                fileName=os.path.join(self.OUTPUT_FOLDER, "recording_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S"), "output.mp4"),
+                                                fileName=os.path.join(self.RECORD_PATH, f"output_{datetime.now().strftime('%m.%d.%Y_%H.%M.%S')}.mp4"),
                                                 physicsClientId=self.CLIENT
                                                 )
-        if self.RECORD and not self.GUI:
-            self.FRAME_NUM = 0
-            self.IMG_PATH = os.path.join(self.OUTPUT_FOLDER, "recording_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S"), '')
-            os.makedirs(os.path.dirname(self.IMG_PATH), exist_ok=True)
+        # if self.RECORD and not self.GUI:
+        #     self.FRAME_NUM = 0
+        #     self.IMG_PATH = os.path.join(self.OUTPUT_FOLDER, "recording_" + datetime.now().strftime("%m.%d.%Y_%H.%M.%S"), '')
+        #     os.makedirs(os.path.dirname(self.IMG_PATH), exist_ok=True)
     
     ################################################################################
 

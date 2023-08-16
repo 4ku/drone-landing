@@ -50,22 +50,18 @@ class LandingAviary(PlatformAviary):
         vel = np.linalg.norm(state[10:13])
         ang_vel = np.linalg.norm(state[13:16])
 
-        # print("--- ang vel", ang_vel)
-
         # Reward for reducing distance from target
         reward = (
             0
             if self.prev_dist is None
             else self.XYZ_PENALTY_FACTOR * (self.prev_dist - dist)
         )
-        # print("dist rew", reward)
 
-        # if ang_vel > 1.5:
-            # reward -= 5
+        if ang_vel > 1.5:
+            reward -= 0.1
 
         # Penalty for high velocity when close to landing
         if dist < self.LANDING_DIST and self.prev_dist is not None and state[2] > 0.05:
-            # print("vel rew", self.VEL_PENALTY_FACTOR * (self.prev_vel - vel))
             reward += self.VEL_PENALTY_FACTOR * (self.prev_vel - vel)
 
         # Time penalty for taking too long to decide
@@ -73,29 +69,14 @@ class LandingAviary(PlatformAviary):
 
         # Reward for landing
         if state[2] <= 0.05:
-            # if self.step_counter / self.SIM_FREQ < 0.9:
-            #     reward -= 100
-
             # Bigger reward if landed within target radius
             if dist < self.TARGET_RADIUS:
-                print("In target", self.INSIDE_RADIUS_BONUS / 2)
                 reward += self.INSIDE_RADIUS_BONUS / 2
 
                 # Additional bonus for soft landing
                 if vel <= self.SOFT_LANDING_VEL:
-                    print("soft land", self.INSIDE_RADIUS_BONUS / 2 + 10)
                     reward += self.INSIDE_RADIUS_BONUS / 2 + 10
                 elif vel <= self.MEDIUM_LANDING_VEL:
-                    # print(
-                    #     "medium land",
-                    #     (
-                    #         1
-                    #         - (vel - self.SOFT_LANDING_VEL)
-                    #         / (self.MEDIUM_LANDING_VEL - self.SOFT_LANDING_VEL)
-                    #     )
-                    #     * self.INSIDE_RADIUS_BONUS
-                    #     / 2,
-                    # )
                     reward += (
                         (
                             1

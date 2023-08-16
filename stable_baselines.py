@@ -95,18 +95,18 @@ class DroneTrainer:
 
         start = time.time()
         total_reward = 0
-        CTRL_FREQ = env.venv.envs[0].CTRL_FREQ
-        CTRL_TIMESTEP = env.venv.envs[0].CTRL_TIMESTEP
-        for i in range(10 * CTRL_FREQ):
+        SIM_FREQ = env.venv.envs[0].SIM_FREQ
+        TIMESTEP = env.venv.envs[0].TIMESTEP
+        for i in range(10 * SIM_FREQ):
             action, _states = model.predict(obs)
             # action = np.array([[1, 1, 1, 1]])
             obs, reward, terminated, info = env.step(action)
             total_reward += reward
             env.render()
-            sync(i, start, CTRL_TIMESTEP)
+            sync(i, start, TIMESTEP)
             if terminated:
                 print("Episode reward", total_reward)
-                time.sleep(5)
+                time.sleep(10)
                 break
         env.close()
 
