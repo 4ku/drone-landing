@@ -1,4 +1,3 @@
-# import gymnasium as gym
 import gym
 import torch
 import torch.nn as nn
@@ -24,12 +23,13 @@ class CustomCNN(nn.Module):
             nn.ReLU(),
             nn.Flatten(),
         )
-        # If input: `torch.Size([1, 12, 48, 64])` then
-        # After Conv1:  torch.Size([1, 32, 11, 15])
-        # After Conv2:  torch.Size([1, 64, 4, 6])
-        # After Conv3:  torch.Size([1, 128, 2, 4])
-        # After Conv4:  torch.Size([1, 64, 2, 4])
-        # After flatten:  torch.Size([1, 512])
+        
+        # If input (in case if n_stack=3): `torch.Size([1, 12, 64, 64])` then 
+        # After Conv1:  torch.Size([1, 32, 15, 15])
+        # After Conv2:  torch.Size([1, 64, 6, 6])
+        # After Conv3:  torch.Size([1, 128, 4, 4])
+        # After Conv4:  torch.Size([1, 64, 4, 4])
+        # After flatten:  torch.Size([1, 1024])
 
         with torch.no_grad():
             n_flatten = self.cnn(

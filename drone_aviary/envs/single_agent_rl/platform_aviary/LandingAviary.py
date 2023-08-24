@@ -17,7 +17,7 @@ def get_random_position():
 class LandingAviary(PlatformAviary):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.EPISODE_LEN_SEC = 5
+        self.EPISODE_LEN_SEC = 13
 
     def reset(self, **kwargs):
         """Resets the environment.

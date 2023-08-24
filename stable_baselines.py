@@ -20,7 +20,8 @@ class DroneTrainer:
     DEFAULT_RECORD_VIDEO = True
     DEFAULT_OUTPUT_FOLDER = "results"
     DEFAULT_EVAL = False
-    DEFAULT_ENV = "takeoff"  # or 'landing'
+    # DEFAULT_ENV = "takeoff"  # or 'landing'
+    DEFAULT_ENV = "landing"  # or 'landing'
     DEFAULT_MODEL_TYPE = "PPO"
 
     def __init__(
@@ -95,19 +96,20 @@ class DroneTrainer:
 
         start = time.time()
         total_reward = 0
-        SIM_FREQ = env.venv.envs[0].SIM_FREQ
         TIMESTEP = env.venv.envs[0].TIMESTEP
-        for i in range(10 * SIM_FREQ):
+        terminated = False
+        i = 0 
+        while not terminated:
             action, _states = model.predict(obs)
-            # action = np.array([[1, 1, 1, 1]])
+            action = np.array([[-0.02, -0.02, -0.02, -0.02]])
             obs, reward, terminated, info = env.step(action)
             total_reward += reward
             env.render()
             sync(i, start, TIMESTEP)
             if terminated:
                 print("Episode reward", total_reward)
-                time.sleep(10)
                 break
+            i += 1
         env.close()
 
     def run(self):

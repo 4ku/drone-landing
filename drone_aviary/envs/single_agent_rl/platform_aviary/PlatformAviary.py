@@ -19,7 +19,7 @@ class PlatformAviary(BaseSingleAgentAviary):
         initial_rpys=None,
         physics: Physics = Physics.PYB,
         freq: int=40,
-        aggregate_phy_steps: int=1,
+        aggregate_phy_steps: int=2,
         gui=False,
         record=False,
         obs: ObservationType = ObservationType.RGB,
@@ -121,21 +121,6 @@ class PlatformAviary(BaseSingleAgentAviary):
 
     ################################################################################
 
-    def _computeTruncated(self):
-        """Computes the current truncated value(s).
-
-        Unused in this implementation.
-
-        Returns
-        -------
-        bool
-            Always false.
-
-        """
-        return False
-
-    ################################################################################
-
     def _computeInfo(self):
         """Computes the current info dict(s).
 
@@ -147,7 +132,7 @@ class PlatformAviary(BaseSingleAgentAviary):
             Dummy value.
 
         """
-        return {}
+        return {'state': self._getDroneStateVector(0)}
 
     ################################################################################
 
