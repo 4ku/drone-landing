@@ -19,8 +19,8 @@ from utils.make_trajectories import (
 )  # Make sure you have this imported
 
 ENV = "takeoff"  # or 'landing'
-N_EPISODES = 20
-N_EPOCHS = 100
+N_EPISODES = 3
+N_EPOCHS = 500
 VECTORIZED_ENV = False  # Flag for vectorized env using frame stack
 
 
