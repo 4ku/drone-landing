@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3.8-venv \
     curl \
-    git
+    git \
+    libgl1-mesa-glx
 
 # Update pip
 RUN pip3 install --upgrade pip

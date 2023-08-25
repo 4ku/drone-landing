@@ -36,9 +36,24 @@ Before we dive into the environments and methods, you'll need to set up your env
 
 ### 2. Docker
 
-If you prefer Docker, you can simply run:
+For those preferring Docker, follow the instructions below:
+
+#### **Build the Docker image**:
+
 ```bash
-docker run --gpus all -it drone-training
+docker build -t drone-training .
+```
+
+#### **Run the Docker container**:
+
+First, allow X11 forwarding:
+```bash
+xhost +
+```
+
+Then, initiate the container:
+```bash
+docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --gpus all -it drone-training
 ```
 
 ## Training Environments
