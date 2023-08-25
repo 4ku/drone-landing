@@ -38,10 +38,10 @@ Before we dive into the environments and methods, you'll need to set up your env
 
 For those preferring Docker, follow the instructions below:
 
-#### **Build the Docker image**:
+#### **Pull the Docker image**:
 
 ```bash
-docker build -t drone-training .
+docker pull 4ku2/drone-training
 ```
 
 #### **Run the Docker container**:
@@ -53,7 +53,7 @@ xhost +
 
 Then, initiate the container:
 ```bash
-docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --gpus all -it drone-training
+docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --gpus all -it 4ku2/drone-training
 ```
 
 ## Training Environments
